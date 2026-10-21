@@ -9,7 +9,7 @@ groups:
       # --- Availability ---
 
       - alert: MainstayExporterDown
-        expr: mainstay_exporter_up == 0
+        expr: (mainstay_exporter_up == 0) or absent(mainstay_exporter_up) or (up{job="mainstay"} == 0)
         for: 5m
         labels:
           severity: critical
@@ -115,7 +115,7 @@ groups:
       # --- Data Freshness ---
 
       - alert: StaleMetrics
-        expr: time() - mainstay_metrics_collection_seconds > 120
+        expr: (time() - mainstay_metrics_collection_seconds > 120) or absent(mainstay_metrics_collection_seconds)
         for: 5m
         labels:
           severity: critical
